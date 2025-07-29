@@ -1,0 +1,254 @@
+openapi: 3.0.0
+info:
+  title: API - Nuevo SPA
+  version: v1
+  description: API para gestión de tareas con autenticación JWT
+
+servers:
+  - url: http://localhost:8060
+
+tags:
+  - name: Autenticación
+    description: Endpoints para login
+  - name: Tareas
+    description: Endpoints para gestionar tareas
+
+paths:
+  /api/login:
+    post:
+      tags:
+        - Autenticación
+      summary: Autenticación de usuario
+      description: Autentica un usuario y devuelve un token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              username: user1
+              password: 123456
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /tareas:
+    get:
+      tags:
+        - Tareas
+      summary: Listar todas las tareas
+      description: Devuelve un listado de todas las tareas registradas
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de tareas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tarea'
+
+  /tarea:
+    post:
+      tags:
+        - Tareas
+      summary: Crear tarea
+      description: Crea una nueva tarea
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tarea'
+            example:
+              nombre: "Tarea 1"
+              usuario:
+                id: 1
+              estadoTarea:
+                id: 1
+      responses:
+        '201':
+          description: Tarea creada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tarea'
+        '400':
+          description: Error de validación
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tarea/{id}:
+    put:
+      tags:
+        - Tareas
+      summary: Actualizar tarea
+      description: Actualiza la tarea correspondiente al ID proporcionado
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tarea'
+      responses:
+        '200':
+          description: Tarea actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tarea'
+        '400':
+          description: Error de validación
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '404':
+          description: Tarea no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+    delete:
+      tags:
+        - Tareas
+      summary: Eliminar tarea
+      description: Elimina la tarea correspondiente al ID proporcionado
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Tarea eliminada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '404':
+          description: Tarea no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "0"
+        token:
+          type: string
+        message:
+          type: string
+
+    Tarea:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nombre:
+          type: string
+        usuario:
+          $ref: '#/components/schemas/UsuarioRef'
+        estadoTarea:
+          $ref: '#/components/schemas/EstadoTareaRef'
+      required:
+        - nombre
+        - usuario
+        - estadoTarea
+
+    UsuarioRef:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+      required:
+        - id
+        - username
+
+    EstadoTareaRef:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nombre:
+          type: string
+      required:
+        - id
+        - nombre
+
+    Response:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 1
+        message:
+          type: string
