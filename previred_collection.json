@@ -1,0 +1,169 @@
+{
+  "info": {
+    "_postman_id": "da481583-4aa6-4dc3-ac57-d95c4226f490",
+    "name": "PreviRed",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "5509405"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"username\":\"estebanjpc\",\n    \"password\":\"12345\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8060/api/login",
+          "host": [
+            "localhost"
+          ],
+          "port": "8060",
+          "path": [
+            "api",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listado Tareas",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer  ",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "localhost:8060/tareas",
+          "host": [
+            "localhost"
+          ],
+          "port": "8060",
+          "path": [
+            "tareas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Tarea",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer  ",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"nombre\": \"Tarea 1\",\n    \"usuario\": {\n        \"id\": 1\n    },\n    \"estadoTarea\": {\n        \"id\": 1\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8060/tarea",
+          "host": [
+            "localhost"
+          ],
+          "port": "8060",
+          "path": [
+            "tarea"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar Tarea",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer  ",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "localhost:8060/tarea/3",
+          "host": [
+            "localhost"
+          ],
+          "port": "8060",
+          "path": [
+            "tarea",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar Tarea",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer  ",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"nombre\": \"Tarea 1\",\n    \"usuario\": {\n        \"id\": 1\n    },\n    \"estadoTarea\": {\n        \"id\": 2\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8060/tarea/1",
+          "host": [
+            "localhost"
+          ],
+          "port": "8060",
+          "path": [
+            "tarea",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
